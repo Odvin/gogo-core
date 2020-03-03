@@ -1,0 +1,50 @@
+version: '3.5'
+
+services:
+  mysql-db:
+    container_name: gogo_db
+    image: mysql:8
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-132465}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    expose:
+      - ${MYSQL_PORT}
+    volumes:
+      - gogo-db:/var/lib/mysql
+    networks:
+      - gogo
+
+  api-server:
+    container_name: gogo_api
+    image: node:12
+    working_dir: /usr/src/api-server
+    environment:
+      - API_SERVER_PORT=${API_SERVER_PORT}
+      - MYSQL_HOST=${MYSQL_HOST:-mysql-db}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-132465}
+    ports:
+      - ${API_SERVER_PORT}:${API_SERVER_PORT}
+    expose:
+      - ${API_SERVER_PORT}
+    volumes:
+      - ./services/api-server:/usr/src/api-server
+    depends_on:
+      - mysql-db
+    networks:
+      - gogo
+    command: npm run api-dev
+
+volumes:
+  gogo-db:
+
+networks:
+  gogo:
+    name: gogo-dev-network
