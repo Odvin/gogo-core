@@ -35,12 +35,12 @@ services:
     expose:
       - ${API_SERVER_PORT}
     volumes:
-      - ./services/api-server:/usr/src/api-server
+      - ./:/usr/src/api-server
     depends_on:
       - mysql-db
     networks:
       - gogo
-    command: npm run api-dev
+    command: npm run start:dev
 
 volumes:
   gogo-db:
