@@ -1,24 +1,28 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm'
-
-//ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY '132465';
-
-// flush privileges;
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: 'mysql',
-      host: 'mysql-db',
-      port: 3306,
-      username: 'root',
-      password: '132465',
-      database: 'gg',
-      entities: [],
-      synchronize: true,
-  })],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
+        type: 'mysql',
+        host: configService.get<string>('MYSQL_HOST'),
+        port: configService.get<number>('MYSQL_PORT'),
+        database: configService.get<string>('MYSQL_DATABASE'),
+        username: configService.get<string>('MYSQL_USER'),
+        password: configService.get<string>('MYSQL_PASSWORD'),
+        synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
+        entities: [__dirname + '/../**/*.entity.{ts,js}'],
+      }),
+      inject: [ConfigService],
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
