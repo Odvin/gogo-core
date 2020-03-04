@@ -9,7 +9,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
       - MYSQL_PORT=${MYSQL_PORT:-3306}
       - MYSQL_USER=${MYSQL_USER:-root}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-132465}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-topSecret51}
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
     expose:
@@ -18,6 +18,18 @@ services:
       - gogo-db:/var/lib/mysql
     networks:
       - gogo
+  
+  mysql-db-setup:
+    container_name: gogo_db_setup
+    image: mysql:8
+    depends_on:
+      - mysql-db
+    volumes:
+      - ./db-operations:/db-operations
+    networks:
+      - gogo
+    restart: "no"
+    entrypoint: [ "bash", "/db-operations/perform.sh"]
 
   api-server:
     container_name: gogo_api
