@@ -14,7 +14,7 @@ If your do not want to mash logs do in separate consoles.
 
 Console - 1
 ```
-docker-com pose up mysql-db mysql-db-setup
+docker-compose up mysql-db mysql-db-setup
 ```
 
 Console - 2

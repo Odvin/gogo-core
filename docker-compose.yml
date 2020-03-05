@@ -10,7 +10,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
       - MYSQL_USER=${MYSQL_USER:-ggUser}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ggPassword}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-topSecret51}
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
     expose:
@@ -26,7 +26,7 @@ services:
     environment:
       - MYSQL_USER=${MYSQL_USER:-ggUser}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ggPassword}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-topSecret51}
     depends_on:
       - mysql-db
     volumes:
@@ -46,7 +46,6 @@ services:
       - MYSQL_PORT=${MYSQL_PORT:-3306}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
       - MYSQL_USER=${MYSQL_USER:-ggUser}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ggPassword}
     ports:
       - ${API_SERVER_PORT}:${API_SERVER_PORT}
     expose:
