@@ -6,11 +6,11 @@ services:
     image: mysql:8
     restart: always
     environment:
-      - MYSQL_PORT=${MYSQL_PORT:-3306}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
-      - MYSQL_USER=${MYSQL_USER:-ggUser}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ggPassword}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-topSecret51}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
     expose:
@@ -24,9 +24,9 @@ services:
     container_name: gogo_db_setup
     image: mysql:8
     environment:
-      - MYSQL_USER=${MYSQL_USER:-ggUser}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ggPassword}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-topSecret51}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql-db
     volumes:
@@ -42,10 +42,10 @@ services:
     working_dir: /usr/src/api-server
     environment:
       - API_SERVER_PORT=${API_SERVER_PORT}
-      - MYSQL_HOST=${MYSQL_HOST:-mysql-db}
-      - MYSQL_PORT=${MYSQL_PORT:-3306}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-gg}
-      - MYSQL_USER=${MYSQL_USER:-ggUser}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
     ports:
       - ${API_SERVER_PORT}:${API_SERVER_PORT}
     expose:

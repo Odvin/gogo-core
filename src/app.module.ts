@@ -7,9 +7,10 @@ import { HealthCheckerModule } from './health-checker/health-checker.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
         type: 'mysql',
         host: configService.get<string>('MYSQL_HOST'),
