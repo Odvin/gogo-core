@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthCheckerModule } from './health-checker/health-checker.module';
 import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,12 +22,13 @@ import { UsersModule } from './users/users.module';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
-        entities: [__dirname + '/../**/*.entity.{ts,js}'],
+        entities: [User]
       }),
       inject: [ConfigService],
     }),
     HealthCheckerModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

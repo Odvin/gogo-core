@@ -1,4 +1,4 @@
-import { Education } from './education.enum';
+import { Gender } from './gender.enum';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
@@ -8,13 +8,16 @@ export class User extends BaseEntity {
 
   @Column({ unique: true, nullable: false })
   public email: string;
+  
+  @Column({ nullable: false })
+  password: string;
 
   @Column({ nullable: false })
-  public firstName: string;
+  salt: string;
 
-  @Column({ nullable: false })
-  public lastName: string;
+  @Column({ nullable: true })
+  public username: string;
 
-  @Column({ type: 'enum', enum: Education, nullable: true })
-  public education: Education;
+  @Column({ type: 'enum', enum: Gender, nullable: true })
+  public gender: Gender;
 }

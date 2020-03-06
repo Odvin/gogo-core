@@ -7,7 +7,7 @@ import { User } from './user.entity';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserRepository)
+    @InjectRepository(User)
     private userRepository: UserRepository
   ) { }
 

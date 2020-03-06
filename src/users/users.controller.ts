@@ -11,7 +11,7 @@ export class UsersController {
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    this.logger.verbose(`User ${createUserDto.firstName} :: ${createUserDto.firstName} has to be created`);
+    this.logger.verbose(`User ${createUserDto.username} has to be created`);
     return this.userService.createUser(createUserDto);
   }
 }
