@@ -21,3 +21,14 @@ Console - 2
 ```
 docker-compose up api-server
 ```
+
+## e2e tests
+Enter into the container
+```
+ docker exec -it gogo_api bash
+ ```
+
+ Run tests 
+ ```
+ npm run test:e2e
+ ```
