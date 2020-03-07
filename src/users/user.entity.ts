@@ -12,12 +12,9 @@ export class User extends BaseEntity {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ nullable: false })
-  salt: string;
-
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 'Anonymous' })
   public username: string;
 
-  @Column({ type: 'enum', enum: Gender, nullable: true })
+  @Column({ type: 'enum', enum: Gender, default: Gender.male })
   public gender: Gender;
 }

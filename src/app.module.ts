@@ -6,14 +6,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthCheckerModule } from './health-checker/health-checker.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
         type: 'mysql',
         host: configService.get<string>('MYSQL_HOST'),
@@ -28,7 +26,6 @@ import { AuthModule } from './auth/auth.module';
     }),
     HealthCheckerModule,
     UsersModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

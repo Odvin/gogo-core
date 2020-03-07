@@ -1,25 +1,23 @@
 import { EntityRepository, Repository } from "typeorm";
 import { User } from './user.entity';
-import { Logger, ConflictException, InternalServerErrorException } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { Logger, ConflictException, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { Gender } from "./gender.enum";
-import { AuthCredentialsDto } from "src/auth/dto/auth-credentials.dto";
-import * as bcrypt from 'bcrypt';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   private logger = new Logger('UserRepository')
 
-  async singUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { email, password } = authCredentialsDto;
+  async signUp(authCredentials: AuthCredentialsDto): Promise<void> {
+    const { email, password } = authCredentials;
 
     const user = this.create()
     user.email = email;
-    user.salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(password, user.salt);
+    user.password = password;
 
     try {
       await user.save();
+      this.logger.verbose(`User ${user.email} has been created with id: ${user.id}`);
     } catch(error) {
       if (error.code = '23505') {
         throw new ConflictException('User email already exists');
@@ -30,21 +28,21 @@ export class UserRepository extends Repository<User> {
 
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const {
-      email,
-      username,
-      gender
-    } = createUserDto;
+  async findUserByEmail(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+    return this.findOne({email: authCredentialsDto.email});
+  }
 
-    const user = new User();
-    user.email = email;
-    user.username = username;
-    user.gender = Gender[gender];
+  async updateUserInfo(user: User, userInfo: User): Promise<User> {
+    
+    const query = this.createQueryBuilder().update('User');
 
-    await user.save()
+    query.set(userInfo).where("id = :id", { id: user.id })
+ 
+    await query.execute();
 
-    return user;
+    const updatedUser = await this.findOne({ id: user.id });
+    
+    return updatedUser;
   }
 
 }
