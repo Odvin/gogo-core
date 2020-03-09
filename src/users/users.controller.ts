@@ -1,4 +1,4 @@
-import { Controller, Logger, Post, Body, UnauthorizedException, Patch, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Controller, Logger, Post, Body, UnauthorizedException, Patch, ValidationPipe, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './users.service';
 import { AuthCredentialsDto } from 'src/users/dto/auth-credentials.dto';
@@ -6,6 +6,7 @@ import { AuthService } from 'src/users/auth.service';
 import { JwtToken } from './interfaces/jwt-token.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
+import { UserInfoDto } from './dto/user-info.dto';
 
 @Controller('users')
 export class UsersController {
@@ -46,13 +47,11 @@ export class UsersController {
   @Patch('/info')
   @UseGuards(AuthGuard())
   async updateUserInfo(
-    @Body(ValidationPipe) userInfo: User,
+    @Body(ValidationPipe) userInfo: UserInfoDto,
     @GetUser() user: User
-  ): Promise<JwtToken> {
+  ): Promise<User> {
     this.logger.verbose(`User ${user.email} patch personal info`);
 
-    const updatedUser: User = await this.userService.updateUserInfo(user, userInfo);
-
-    return this.authService.signUserToken(updatedUser);
+    return this.userService.updateUserInfo(user, userInfo);
   }
 }

@@ -6,6 +6,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthCheckerModule } from './health-checker/health-checker.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
+import { GamesModule } from './games/games.module';
+import { GameToUser } from './games/game-to-user.entity';
+import { Game } from './games/game.entity';
 
 @Module({
   imports: [
@@ -20,12 +23,13 @@ import { User } from './users/user.entity';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
-        entities: [User]
+        entities: [User, Game, GameToUser]
       }),
       inject: [ConfigService],
     }),
     HealthCheckerModule,
     UsersModule,
+    GamesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
